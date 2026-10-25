@@ -333,3 +333,19 @@ async def pdf_first_page_to_image(pdf_bytes: bytes) -> bytes | None:
     finally:
         os.unlink(pdf_path)
     return None
+
+
+# ── Run with:  python main.py ────────────────────────────────────────────────
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", "8000"))
+    if os.getenv("PORT"):
+        # Cloud (Render etc.) sets PORT — listen on all interfaces
+        uvicorn.run(app, host="0.0.0.0", port=port)
+    else:
+        # Local laptop — open the browser automatically
+        import threading, webbrowser
+        url = f"http://localhost:{port}"
+        print(f"\n🌾 KisaanVaani running →  {url}\n   (Ctrl+C to stop)\n")
+        threading.Timer(1.5, lambda: webbrowser.open(url)).start()
+        uvicorn.run(app, host="127.0.0.1", port=port)
